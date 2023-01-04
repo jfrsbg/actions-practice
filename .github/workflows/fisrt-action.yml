@@ -1,0 +1,12 @@
+name: first workflow
+on: workflow_dispatch #it awaits the user to trigger the workflow manually
+jobs:
+  first-job: 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print something
+        run: echo "first action"
+      - name: Print something
+        run: echo "finished"
+
+      
