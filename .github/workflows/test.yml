@@ -14,3 +14,17 @@ jobs:
         run: |
           cd second-action-react
           npm test
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: |
+          cd second-action-react
+          npm ci
+      - name: Build project
+        run: |
+          cd second-action-react
+          npm run build
