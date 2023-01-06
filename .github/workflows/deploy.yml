@@ -1,0 +1,58 @@
+name: Test Project
+on: push
+jobs: 
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: |
+          cd first-exercise
+          npm ci
+      - name: Run lint
+        run: |
+          cd first-exercise
+          npm run lint
+  test:
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: |
+          cd first-exercise
+          npm ci
+      - name: Test project
+        run: |
+          cd first-exercise
+          npm test
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: |
+          cd first-exercise
+          npm ci
+      - name: Build project
+        run: |
+          cd first-exercise
+          npm run build
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: |
+          cd first-exercise
+          npm ci
+      - name: Build project
+        run: |
+          cd first-exercise
+          echo "Deploying your application"
