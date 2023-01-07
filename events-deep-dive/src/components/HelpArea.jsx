@@ -10,7 +10,7 @@ const HELP_ITEMS = [
   {
     id: 'h2',
     title: 'Title',
-    text: 'text to describe',
+    text: 'text to describe123',
   },
   {
     id: 'h3',
