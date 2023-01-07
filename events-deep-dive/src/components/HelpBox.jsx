@@ -4,7 +4,7 @@ function HelpBox({ title, text }) {
   return (
     <article className="help-box">
       <h1>{title}</h1>
-      <p>{text}</p>
+      <h2>{text}</h2>
     </article>
   );
 }
