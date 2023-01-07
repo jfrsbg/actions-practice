@@ -1,0 +1,23 @@
+name: Events pull request
+on:
+  pull_request:
+    types: [opened, edited]
+  workflow_dispatch:
+jobs: 
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: |
+          cd events-deep-dive
+          npm ci
+      - name: Run tests
+        run: |
+          cd events-deep-dive
+          npm test
+      - name: Build project
+        run: |
+          cd events-deep-dive
+          npm run build
