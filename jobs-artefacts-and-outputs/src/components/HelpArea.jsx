@@ -9,8 +9,8 @@ const HELP_ITEMS = [
   },
   {
     id: 'h2',
-    title: 'Title',
-    text: 'text to describe123',
+    title: 'What is GitHub?',
+    text: 'GitHub is a company and online offering, providing you with tons of Git-related services (e.g., cloud repositories).',
   },
   {
     id: 'h3',

@@ -1,4 +1,4 @@
-name: Test Project
+name: Deploy website
 on:
   push:
     branches:
@@ -14,6 +14,10 @@ jobs:
         run: |
           cd jobs-artefacts-and-outputs
           npm ci
+      - name: Run lint
+        run: |
+          cd jobs-artefacts-and-outputs
+          npm run lint
       - name: Test project
         run: |
           cd jobs-artefacts-and-outputs
@@ -28,10 +32,17 @@ jobs:
         run: |
           cd jobs-artefacts-and-outputs
           npm ci
-      - name: Build project
+      - name: Build website
         run: |
           cd jobs-artefacts-and-outputs
           npm run build
+      - name: upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-files
+          path: |
+            dist
+            package.json
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -45,4 +56,4 @@ jobs:
       - name: Build project
         run: |
           cd jobs-artefacts-and-outputs
-          echo "Deploying your application"
+          echo "Deploying your application..."
