@@ -1,0 +1,48 @@
+name: Test Project
+on:
+  push:
+    branches:
+      - main
+jobs: 
+  test:
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: |
+          cd jobs-artefacts-and-outputs
+          npm ci
+      - name: Test project
+        run: |
+          cd jobs-artefacts-and-outputs
+          npm test
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: |
+          cd jobs-artefacts-and-outputs
+          npm ci
+      - name: Build project
+        run: |
+          cd jobs-artefacts-and-outputs
+          npm run build
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: |
+          cd jobs-artefacts-and-outputs
+          npm ci
+      - name: Build project
+        run: |
+          cd jobs-artefacts-and-outputs
+          echo "Deploying your application"
