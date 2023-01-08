@@ -15,11 +15,9 @@ jobs:
           npm ci
       - name: Run lint
         run: |
-          cd jobs-artefacts-and-outputs
           npm run lint
       - name: Test project
         run: |
-          cd jobs-artefacts-and-outputs
           npm test
   build:
     needs: test
