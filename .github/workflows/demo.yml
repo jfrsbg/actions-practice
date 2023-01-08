@@ -40,8 +40,8 @@ jobs:
         with:
           name: dist-files
           path: |
-            dist
-            package.json
+            jobs-artefacts-and-outputs/dist
+            jobs-artefacts-and-outputs/package.json
   deploy:
     needs: build
     runs-on: ubuntu-latest
