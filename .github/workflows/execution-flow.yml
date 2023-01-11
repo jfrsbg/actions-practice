@@ -48,7 +48,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: test-report
-          path: test.json
+          path: workflow-control-and-job-execution/test.json
   build:
     needs: test
     runs-on: ubuntu-latest
