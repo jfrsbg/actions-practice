@@ -16,6 +16,10 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install Dependencies
-        run: npm ci
+        run: |
+          cd workflow-control-and-job-execution
+          npm ci
       - name: Build project
-        run: npm run build
+        run: |
+          cd workflow-control-and-job-execution
+          npm run build
