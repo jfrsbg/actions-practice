@@ -80,6 +80,8 @@ jobs:
     uses: ./.github/workflows/reusable.yml
     with:
       artifact-name: dist-files
+    #secrets: 
+    #  my-secret: ${{ secrets.some-secret }}
   report:
     needs: [lint, deploy]
     if: failure()
