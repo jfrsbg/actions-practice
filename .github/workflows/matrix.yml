@@ -5,8 +5,14 @@ jobs:
     continue-on-error: true
     strategy:
       matrix:
-        node-version: [12, 14, 16]
-        operationg-system: [ubuntu-latest, windows-latest]
+        node-version: [12, 14, 16] #you can define you own key
+        operationg-system: [ubuntu-latest, windows-latest] #you can define you own key
+        include: #this is a reserved key. you can use this to create a single combination, whereas the above keys will create every possible combination automatically
+          - node-version: 18
+            operationg-system: ubuntu-latest
+        exclude: #you can also exclude combinations, it works likely as the above example, excluding single combinations
+          - node-version: 12
+            operationg-system: windows-latest
     runs-on: ${{ matrix.operationg-system }}
     steps:
       - name: Get code
