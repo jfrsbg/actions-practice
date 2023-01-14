@@ -28,6 +28,8 @@ jobs:
     steps:
       - name: Get Code
         uses: actions/checkout@v3
+        with:
+          path: jobs-and-docker-containers
       - name: Cache dependencies
         uses: actions/cache@v3
         with:
