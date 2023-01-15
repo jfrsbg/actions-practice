@@ -1,61 +1,69 @@
-name: Deployment (Container)
+name: Deployment
 on:
   push:
     branches:
       - main
-      - dev
-env:
-  CACHE_KEY: node-deps
-  MONGODB_DB_NAME: gha-demo
 jobs:
-  test:
-    environment: testing
+  lint:
     runs-on: ubuntu-latest
-    container: #adding containers to your jobs will make every step of this job to be running inside that container
-      image: node:16
-    env:
-      MONGODB_CONNECTION_PROTOCOL: mongodb
-      MONGODB_CLUSTER_ADDRESS: my-service
-      MONGODB_USERNAME: root
-      MONGODB_PASSWORD: myPass
-      PORT: 8080
-    services:
-      my-service:
-        image: mongo
-        env:
-          MONGO_INITDB_ROOT_USERNAME: root
-          MONGO_INITDB_ROOT_PASSWORD: myPass
     steps:
-      - name: Get Code
+      - name: Get code
         uses: actions/checkout@v3
-      - name: Cache dependencies
-        uses: actions/cache@v3
+      - name: Load & cache Dependencies
+        uses: ./.github/actions/composite
+      - name: Lint code
+        run: |
+          cd custom-actions
+          npm run lint
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Load & cache Dependencies
+        uses: ./.github/actions/composite
+      - name: Test code
+        id: run-tests
+        run: |
+          cd custom-actions
+          npm run test
+      - name: Upload test report
+        if: failure() && steps.run-tests.outcome == 'failure'
+        uses: actions/upload-artifact@v3
         with:
-          path: ~/.npm
-          key: ${{ env.CACHE_KEY }}-${{ hashFiles('jobs-and-docker-containers/**/package-lock.json') }}
-      - name: Install dependencies
-        run: |
-          cd jobs-and-docker-containers
-          npm ci
-      - name: Run server
-        run: |
-          cd jobs-and-docker-containers
-          npm start & npx wait-on http://127.0.0.1:$PORT # requires MongoDB Atlas to accept requests from anywhere!
-      - name: Run tests
-        run: |
-          cd jobs-and-docker-containers
-          npm test
-      - name: Output information
-        run: |
-          echo "MONGODB_USERNAME: $MONGODB_USERNAME"
-  deploy:
+          name: test-report
+          path: custom-actions/test.json
+  build:
     needs: test
     runs-on: ubuntu-latest
     steps:
-      - name: Output information
-        env:
-          PORT: 3000
-        run: |        
-          echo "MONGODB_DB_NAME: $MONGODB_DB_NAME"
-          echo "MONGODB_USERNAME: $MONGODB_USERNAME"
-          echo "${{ env.PORT }}"
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Load & cache Dependencies
+        uses: ./.github/actions/composite
+      - name: Build website
+        run: |
+          cd custom-actions
+          npm run build
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-files
+          path: custom-actions/dist
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Get build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: dist-files
+          path: ./custom-actions/dist
+      - name: Output contents
+        run: |
+          cd custom-actions
+          ls
+      - name: Deploy site
+        run: echo "Deploying..."
